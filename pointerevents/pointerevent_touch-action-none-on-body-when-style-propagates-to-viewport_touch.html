@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html id="html">
+<title>Touch Action None on body when style propagates from body to viewport</title>
+<head>
+  <style>
+    html {
+      touch-action: none;
+    }
+    body {
+      overflow: auto;
+    }
+  </style>
+  <link rel="help" href="crbug.com/1031745">
+  <script src="/resources/testharness.js"></script>
+  <script src="/resources/testharnessreport.js"></script>
+  <script src="/resources/testdriver.js"></script>
+  <script src="/resources/testdriver-actions.js"></script>
+  <script src="/resources/testdriver-vendor.js"></script>
+  <script src="pointerevent_support.js"></script>
+</head>
+<body id='body' onload="onLoad()">
+  <h2>Pointer Events touch-action none on body when style propagates from body to viewport</h2>
+  <h4>Test Description: Try to touch scroll. You shouldn't be able to.</h4>
+  <p>Note: this test is for touch only</p>
+  Body with touch-action=none.
+  <input type="button" id="btnComplete" value="Complete test">
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <p>Paragraph with touch-action=none</p>
+  <script>
+    function onLoad(){
+      var html = document.getElementById("html");
+      var body = document.getElementById("body");
+      var btnComplete = document.getElementById("btnComplete");
+      var test_touchaction = async_test("touch-action none on body when style propagates to viewport");
+      var actions_promise;
+
+      on_event(btnComplete, 'click', function(event) {
+        test_touchaction.step(function() {
+            assert_equals(html.scrollLeft, 0, "html scroll x offset should be 0 in the end of the test");
+            assert_equals(html.scrollTop, 0, "html scroll y offset should be 0 in the end of the test");
+        });
+        // Make sure the test finishes after all the input actions are completed.
+        actions_promise.then( () => {
+          test_touchaction.done();
+        });
+      });
+
+      on_event(html, 'scroll', function(event) {
+          test_touchaction.step(failOnScroll, "scroll received while touch-action is none");
+          // Make sure the test finishes after all the input actions are completed.
+          actions_promise.then( () => {
+            test_touchaction.done();
+          });
+      });
+
+      actions_promise = touchScrollInTarget(body, 'down').then(function() {
+          return touchScrollInTarget(body, 'right');
+      }).then(function() {
+          return clickInTarget("touch", btnComplete);
+      });
+    }
+  </script>
+</body>
+</html>
