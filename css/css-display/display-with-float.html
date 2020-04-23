@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Computed float value of flex/grid items</title>
+  <meta name="assert" content="computed float value of flex/grid items should not be 'none'">
+  <script src="/resources/testharness.js"></script>
+  <script src="/resources/testharnessreport.js"></script>
+</head>
+<body>
+  <div style="display:flex;">
+    <div id="flex-item" style="float:left;"></div>
+  </div>
+  <div style="display:grid;">
+    <div id="grid-item" style="float:right;"></div>
+  </div>
+  <script>
+    function getFloatFor(id) {
+      return window.getComputedStyle(document.getElementById(id)).getPropertyValue("float");
+    }
+
+    test(function() {
+      assert_equals(getFloatFor("flex-item"), "left");
+      assert_equals(getFloatFor("grid-item"), "right");
+    }, "computed style for float");
+  </script>
+</body>
+</html>
